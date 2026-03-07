@@ -293,16 +293,25 @@ function loadDemoProducts() {
     adminState.products = [
         {
             id: '1',
-            nombre: 'Producto Demo 1',
-            descripcion_corta: 'Descripción del producto demo',
-            imagen_url: 'https://via.placeholder.com/100',
+            nombre: 'Chaleco Táctico Profesional',
+            descripcion_corta: 'Chaleco de protección con múltiples bolsillos',
+            imagen_url: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=200',
             activo: true,
-            categorias: { nombre: 'Categoría Demo' }
+            destacado: true,
+            categorias: { nombre: 'Equipamiento Táctico' }
+        },
+        {
+            id: '2',
+            nombre: 'Casco de Protección',
+            descripcion_corta: 'Casco nivel IIIA',
+            imagen_url: 'https://images.unsplash.com/photo-1595590424252-552d5f0a9a21?w=200',
+            activo: true,
+            destacado: false,
+            categorias: { nombre: 'Protección Personal' }
         }
     ];
     renderProducts();
 }
-
 async function loadCategories() {
     try {
         const { data, error } = await window.supabaseClient
