@@ -2711,3 +2711,27 @@ input, textarea, select {
 .sidebar-overlay.active {
     display: block !important;
 }
+/* Ajuste global para imágenes */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Contenedor de imagen de producto / categoría */
+.product-image,
+.category-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img,
+.category-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
