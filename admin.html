@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="admin-body">
+    
     <!-- Login Screen -->
     <div class="admin-login" id="loginScreen">
         <div class="login-card">
@@ -37,7 +38,7 @@
         
         <!-- Mobile Header -->
         <header class="admin-header">
-            <button class="menu-toggle-admin" id="menuToggleAdmin">
+            <button class="menu-toggle-admin" id="menuToggleAdmin" type="button">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12"/>
                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -45,32 +46,30 @@
                 </svg>
             </button>
             <div class="admin-header-brand">
-                <img src="assets/logo.png" alt="DZ Shielding">
-                <span>Admin Panel</span>
+                <img src="logo.jpeg" alt="DZ Shielding">
+                <span>Admin</span>
             </div>
-            <div class="admin-header-actions">
-                <a href="index.html" class="header-link" title="Ver tienda">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                        <polyline points="15 3 21 3 21 9"/>
-                        <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                </a>
-            </div>
+            <a href="index.html" class="header-link" title="Ver tienda">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+            </a>
         </header>
 
-        <!-- Sidebar Overlay (Mobile) -->
+        <!-- Sidebar Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-header-desktop">
-                <img src="assets/logo.png" alt="DZ Shielding">
+                <img src="logo.jpeg" alt="DZ Shielding">
                 <span>Admin Panel</span>
             </div>
             
             <nav class="sidebar-nav">
-                <button class="nav-item active" data-tab="dashboard">
+                <button class="nav-item active" data-tab="dashboard" type="button">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7"/>
                         <rect x="14" y="3" width="7" height="7"/>
@@ -79,14 +78,14 @@
                     </svg>
                     <span>Dashboard</span>
                 </button>
-                <button class="nav-item" data-tab="products">
+                <button class="nav-item" data-tab="products" type="button">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
                         <line x1="7" y1="7" x2="7.01" y2="7"/>
                     </svg>
                     <span>Productos</span>
                 </button>
-                <button class="nav-item" data-tab="categories">
+                <button class="nav-item" data-tab="categories" type="button">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
                     </svg>
@@ -95,7 +94,7 @@
             </nav>
             
             <div class="sidebar-footer">
-                <button class="logout-btn" id="logoutBtn">
+                <button class="logout-btn" id="logoutBtn" type="button">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
                         <polyline points="16 17 21 12 16 7"/>
@@ -146,7 +145,7 @@
                 <div class="quick-actions">
                     <h3>Acciones Rápidas</h3>
                     <div class="actions-grid">
-                        <button class="action-card" data-action="add-product">
+                        <button class="action-card" data-action="add-product" type="button">
                             <div class="action-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <line x1="12" y1="5" x2="12" y2="19"/>
@@ -155,7 +154,7 @@
                             </div>
                             <span>Nuevo Producto</span>
                         </button>
-                        <button class="action-card" data-action="add-category">
+                        <button class="action-card" data-action="add-category" type="button">
                             <div class="action-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
@@ -186,21 +185,19 @@
                         <h1>Productos</h1>
                         <p>Gestiona tu catálogo</p>
                     </div>
-                    <button class="btn btn-primary" id="addProductBtn">
+                    <button class="btn btn-primary" id="addProductBtn" type="button">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        <span class="btn-text">Nuevo</span>
+                        <span>Nuevo</span>
                     </button>
                 </div>
                 
-                <!-- Mobile Cards View -->
-                <div class="products-mobile" id="productsMobile">
-                    <!-- Products loaded dynamically -->
-                </div>
+                <!-- Mobile Products Cards -->
+                <div class="products-mobile" id="productsMobile"></div>
                 
-                <!-- Desktop Table View -->
+                <!-- Desktop Products Table -->
                 <div class="data-table-container">
                     <table class="data-table">
                         <thead>
@@ -212,9 +209,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="productsTableBody">
-                            <!-- Products loaded dynamically -->
-                        </tbody>
+                        <tbody id="productsTableBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -226,17 +221,15 @@
                         <h1>Categorías</h1>
                         <p>Organiza tus productos</p>
                     </div>
-                    <button class="btn btn-primary" id="addCategoryBtn">
+                    <button class="btn btn-primary" id="addCategoryBtn" type="button">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        <span class="btn-text">Nueva</span>
+                        <span>Nueva</span>
                     </button>
                 </div>
-                <div class="categories-grid" id="categoriesGrid">
-                    <!-- Categories loaded dynamically -->
-                </div>
+                <div class="categories-grid" id="categoriesGrid"></div>
             </div>
         </main>
     </div>
@@ -246,7 +239,7 @@
         <div class="modal-content modal-scroll">
             <div class="modal-header">
                 <h3 id="productModalTitle">Nuevo Producto</h3>
-                <button class="modal-close-btn" data-close="productModal">
+                <button class="modal-close-btn" data-close="productModal" type="button">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
@@ -323,7 +316,7 @@
         <div class="modal-content modal-sm">
             <div class="modal-header">
                 <h3 id="categoryModalTitle">Nueva Categoría</h3>
-                <button class="modal-close-btn" data-close="categoryModal">
+                <button class="modal-close-btn" data-close="categoryModal" type="button">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
@@ -359,8 +352,8 @@
             </div>
             <p id="confirmMessage">¿Estás seguro de realizar esta acción?</p>
             <div class="form-actions">
-                <button class="btn btn-ghost" data-close="confirmModal">Cancelar</button>
-                <button class="btn btn-danger" id="confirmBtn">Confirmar</button>
+                <button class="btn btn-ghost" data-close="confirmModal" type="button">Cancelar</button>
+                <button class="btn btn-danger" id="confirmBtn" type="button">Confirmar</button>
             </div>
         </div>
     </div>
