@@ -1,10 +1,6 @@
-// ═══════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════
 // DZ SHIELDING TACTICAL - ADMIN PANEL
-// ═══════════════════════════════════════════════════════════════
-
-// ─────────────────────────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════
 
 const adminState = {
     user: null,
@@ -15,130 +11,151 @@ const adminState = {
     editingCategory: null
 };
 
-// ─────────────────────────────────────────────────────────────────
-// DOM ELEMENTS
-// ─────────────────────────────────────────────────────────────────
+const adminElements = {};
 
-const adminElements = {
-    // Login
-    loginScreen: document.getElementById('loginScreen'),
-    loginForm: document.getElementById('loginForm'),
-    loginEmail: document.getElementById('loginEmail'),
-    loginPassword: document.getElementById('loginPassword'),
-    loginError: document.getElementById('loginError'),
-    
-    // Dashboard
-    adminDashboard: document.getElementById('adminDashboard'),
-    logoutBtn: document.getElementById('logoutBtn'),
-    
-    // Mobile Navigation (NUEVO)
-    menuToggleAdmin: document.getElementById('menuToggleAdmin'),
-    sidebarOverlay: document.getElementById('sidebarOverlay'),
-    adminSidebar: document.getElementById('adminSidebar'),
-    
-    // Navigation
-    navItems: document.querySelectorAll('.nav-item'),
-    tabs: document.querySelectorAll('.admin-tab'),
-    
-    // Stats
-    totalProducts: document.getElementById('totalProducts'),
-    totalCategories: document.getElementById('totalCategories'),
-    
-    // Products
-    addProductBtn: document.getElementById('addProductBtn'),
-    productsTableBody: document.getElementById('productsTableBody'),
-    productsMobile: document.getElementById('productsMobile'), // NUEVO
-    productModal: document.getElementById('productModal'),
-    productForm: document.getElementById('productForm'),
-    productModalTitle: document.getElementById('productModalTitle'),
-    productId: document.getElementById('productId'),
-    productName: document.getElementById('productName'),
-    productCategory: document.getElementById('productCategory'),
-    productShortDesc: document.getElementById('productShortDesc'),
-    productLongDesc: document.getElementById('productLongDesc'),
-    productImage: document.getElementById('productImage'),
-    imagePreview: document.getElementById('imagePreview'),
-    uploadArea: document.getElementById('uploadArea'), // NUEVO
-    productFeatured: document.getElementById('productFeatured'),
-    productActive: document.getElementById('productActive'),
-    
-    // Categories
-    addCategoryBtn: document.getElementById('addCategoryBtn'),
-    categoriesGrid: document.getElementById('categoriesGrid'),
-    categoryModal: document.getElementById('categoryModal'),
-    categoryForm: document.getElementById('categoryForm'),
-    categoryModalTitle: document.getElementById('categoryModalTitle'),
-    categoryId: document.getElementById('categoryId'),
-    categoryName: document.getElementById('categoryName'),
-    categoryDesc: document.getElementById('categoryDesc'),
-    categoryOrder: document.getElementById('categoryOrder'),
-    
-    // Confirm
-    confirmModal: document.getElementById('confirmModal'),
-    confirmMessage: document.getElementById('confirmMessage'),
-    confirmBtn: document.getElementById('confirmBtn'),
-    
-    // Toast
-    toastContainer: document.getElementById('toastContainer')
-};
-
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // INITIALIZATION
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🚀 Admin Panel Initializing...');
+    
+    initElements();
     initAuth();
-    initMobileNavigation(); // NUEVO
+    initMobileNavigation();
     initNavigation();
     initModals();
     initForms();
     initQuickActions();
+    
+    console.log('✅ Admin Panel Ready');
 });
 
-// ─────────────────────────────────────────────────────────────────
-// MOBILE NAVIGATION (NUEVO)
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// ELEMENTS
+// ═══════════════════════════════════════════════════════════════
+
+function initElements() {
+    adminElements.loginScreen = document.getElementById('loginScreen');
+    adminElements.loginForm = document.getElementById('loginForm');
+    adminElements.loginEmail = document.getElementById('loginEmail');
+    adminElements.loginPassword = document.getElementById('loginPassword');
+    adminElements.loginError = document.getElementById('loginError');
+    adminElements.adminDashboard = document.getElementById('adminDashboard');
+    adminElements.logoutBtn = document.getElementById('logoutBtn');
+    adminElements.menuToggleAdmin = document.getElementById('menuToggleAdmin');
+    adminElements.sidebarOverlay = document.getElementById('sidebarOverlay');
+    adminElements.adminSidebar = document.getElementById('adminSidebar');
+    adminElements.navItems = document.querySelectorAll('.nav-item');
+    adminElements.tabs = document.querySelectorAll('.admin-tab');
+    adminElements.totalProducts = document.getElementById('totalProducts');
+    adminElements.totalCategories = document.getElementById('totalCategories');
+    adminElements.addProductBtn = document.getElementById('addProductBtn');
+    adminElements.productsTableBody = document.getElementById('productsTableBody');
+    adminElements.productsMobile = document.getElementById('productsMobile');
+    adminElements.productModal = document.getElementById('productModal');
+    adminElements.productForm = document.getElementById('productForm');
+    adminElements.productModalTitle = document.getElementById('productModalTitle');
+    adminElements.productId = document.getElementById('productId');
+    adminElements.productName = document.getElementById('productName');
+    adminElements.productCategory = document.getElementById('productCategory');
+    adminElements.productShortDesc = document.getElementById('productShortDesc');
+    adminElements.productLongDesc = document.getElementById('productLongDesc');
+    adminElements.productImage = document.getElementById('productImage');
+    adminElements.imagePreview = document.getElementById('imagePreview');
+    adminElements.uploadArea = document.getElementById('uploadArea');
+    adminElements.productFeatured = document.getElementById('productFeatured');
+    adminElements.productActive = document.getElementById('productActive');
+    adminElements.addCategoryBtn = document.getElementById('addCategoryBtn');
+    adminElements.categoriesGrid = document.getElementById('categoriesGrid');
+    adminElements.categoryModal = document.getElementById('categoryModal');
+    adminElements.categoryForm = document.getElementById('categoryForm');
+    adminElements.categoryModalTitle = document.getElementById('categoryModalTitle');
+    adminElements.categoryId = document.getElementById('categoryId');
+    adminElements.categoryName = document.getElementById('categoryName');
+    adminElements.categoryDesc = document.getElementById('categoryDesc');
+    adminElements.categoryOrder = document.getElementById('categoryOrder');
+    adminElements.confirmModal = document.getElementById('confirmModal');
+    adminElements.confirmMessage = document.getElementById('confirmMessage');
+    adminElements.confirmBtn = document.getElementById('confirmBtn');
+    adminElements.toastContainer = document.getElementById('toastContainer');
+    
+    console.log('📦 Elements loaded:', Object.keys(adminElements).length);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MOBILE NAVIGATION
+// ═══════════════════════════════════════════════════════════════
 
 function initMobileNavigation() {
-    // Toggle sidebar
-    adminElements.menuToggleAdmin?.addEventListener('click', toggleSidebar);
-    adminElements.sidebarOverlay?.addEventListener('click', closeSidebar);
+    console.log('📱 Initializing mobile navigation...');
     
-    // Close sidebar on nav item click (mobile)
-    adminElements.navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                closeSidebar();
-            }
+    if (adminElements.menuToggleAdmin) {
+        adminElements.menuToggleAdmin.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🍔 Menu toggle clicked');
+            toggleSidebar();
         });
-    });
+    } else {
+        console.warn('⚠️ menuToggleAdmin not found');
+    }
+    
+    if (adminElements.sidebarOverlay) {
+        adminElements.sidebarOverlay.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🌫️ Overlay clicked');
+            closeSidebar();
+        });
+    } else {
+        console.warn('⚠️ sidebarOverlay not found');
+    }
 }
 
 function toggleSidebar() {
-    adminElements.adminSidebar.classList.toggle('active');
-    adminElements.sidebarOverlay.classList.toggle('active');
+    console.log('🔄 Toggling sidebar...');
+    
+    if (adminElements.adminSidebar) {
+        adminElements.adminSidebar.classList.toggle('active');
+    }
+    if (adminElements.sidebarOverlay) {
+        adminElements.sidebarOverlay.classList.toggle('active');
+    }
 }
 
 function closeSidebar() {
-    adminElements.adminSidebar.classList.remove('active');
-    adminElements.sidebarOverlay.classList.remove('active');
+    console.log('❌ Closing sidebar...');
+    
+    if (adminElements.adminSidebar) {
+        adminElements.adminSidebar.classList.remove('active');
+    }
+    if (adminElements.sidebarOverlay) {
+        adminElements.sidebarOverlay.classList.remove('active');
+    }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // AUTHENTICATION
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function initAuth() {
-    // Check existing session
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+    console.log('🔐 Initializing auth...');
+    
+    if (!window.supabaseClient) {
+        console.error('❌ Supabase client not found!');
+        showToast('Error: Supabase no está configurado', 'error');
+        return;
+    }
+    
+    window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
         if (session) {
             adminState.user = session.user;
             showDashboard();
         }
     });
     
-    // Listen for auth changes
-    supabaseClient.auth.onAuthStateChange((event, session) => {
+    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+        console.log('🔐 Auth event:', event);
         if (event === 'SIGNED_IN' && session) {
             adminState.user = session.user;
             showDashboard();
@@ -148,22 +165,26 @@ function initAuth() {
         }
     });
     
-    // Login form
-    adminElements.loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await handleLogin();
-    });
+    if (adminElements.loginForm) {
+        adminElements.loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await handleLogin();
+        });
+    }
     
-    // Logout
-    adminElements.logoutBtn.addEventListener('click', handleLogout);
+    if (adminElements.logoutBtn) {
+        adminElements.logoutBtn.addEventListener('click', handleLogout);
+    }
 }
 
 async function handleLogin() {
-    const email = adminElements.loginEmail.value;
-    const password = adminElements.loginPassword.value;
+    const email = adminElements.loginEmail?.value;
+    const password = adminElements.loginPassword?.value;
+    
+    console.log('🔑 Attempting login:', email);
     
     try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
             email,
             password
         });
@@ -172,37 +193,59 @@ async function handleLogin() {
         
         adminState.user = data.user;
         showDashboard();
+        showToast('Sesión iniciada correctamente', 'success');
         
     } catch (error) {
-        adminElements.loginError.textContent = error.message;
+        console.error('❌ Login error:', error);
+        if (adminElements.loginError) {
+            adminElements.loginError.textContent = error.message;
+        }
     }
 }
 
 async function handleLogout() {
-    await supabaseClient.auth.signOut();
+    await window.supabaseClient.auth.signOut();
     showLogin();
+    showToast('Sesión cerrada', 'success');
 }
 
 function showLogin() {
-    adminElements.loginScreen.style.display = 'flex';
-    adminElements.adminDashboard.style.display = 'none';
+    if (adminElements.loginScreen) {
+        adminElements.loginScreen.style.display = 'flex';
+    }
+    if (adminElements.adminDashboard) {
+        adminElements.adminDashboard.style.display = 'none';
+    }
 }
 
 function showDashboard() {
-    adminElements.loginScreen.style.display = 'none';
-    adminElements.adminDashboard.style.display = 'flex';
+    if (adminElements.loginScreen) {
+        adminElements.loginScreen.style.display = 'none';
+    }
+    if (adminElements.adminDashboard) {
+        adminElements.adminDashboard.style.display = 'flex';
+    }
     loadData();
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // NAVIGATION
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function initNavigation() {
+    console.log('🧭 Initializing navigation...');
+    
     adminElements.navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const tab = item.dataset.tab;
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tab = this.dataset.tab;
+            console.log('📍 Tab clicked:', tab);
             switchTab(tab);
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            }
         });
     });
 }
@@ -210,46 +253,38 @@ function initNavigation() {
 function switchTab(tab) {
     adminState.currentTab = tab;
     
-    // Update nav
     adminElements.navItems.forEach(item => {
         item.classList.toggle('active', item.dataset.tab === tab);
     });
     
-    // Update tabs
     adminElements.tabs.forEach(t => {
         t.classList.toggle('active', t.id === `tab-${tab}`);
     });
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // DATA LOADING
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 async function loadData() {
-    await Promise.all([
-        loadProducts(),
-        loadCategories()
-    ]);
+    console.log('📊 Loading data...');
+    await Promise.all([loadProducts(), loadCategories()]);
     updateStats();
 }
 
 async function loadProducts() {
     try {
-        const { data, error } = await supabaseClient
+        const { data, error } = await window.supabaseClient
             .from('productos')
-            .select(`
-                *,
-                categorias (nombre)
-            `)
+            .select(`*, categorias (nombre)`)
             .order('created_at', { ascending: false });
         
         if (error) throw error;
         adminState.products = data || [];
         renderProducts();
-        
+        console.log('✅ Products loaded:', adminState.products.length);
     } catch (error) {
-        console.error('Error loading products:', error);
-        showToast('Error al cargar productos', 'error');
+        console.error('❌ Error loading products:', error);
         loadDemoProducts();
     }
 }
@@ -258,12 +293,11 @@ function loadDemoProducts() {
     adminState.products = [
         {
             id: '1',
-            nombre: 'Chaleco Táctico Profesional',
-            descripcion_corta: 'Chaleco de protección con múltiples bolsillos',
-            imagen_url: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=100',
+            nombre: 'Producto Demo 1',
+            descripcion_corta: 'Descripción del producto demo',
+            imagen_url: 'https://via.placeholder.com/100',
             activo: true,
-            destacado: true,
-            categorias: { nombre: 'Equipamiento Táctico' }
+            categorias: { nombre: 'Categoría Demo' }
         }
     ];
     renderProducts();
@@ -271,7 +305,7 @@ function loadDemoProducts() {
 
 async function loadCategories() {
     try {
-        const { data, error } = await supabaseClient
+        const { data, error } = await window.supabaseClient
             .from('categorias')
             .select('*')
             .order('orden', { ascending: true });
@@ -280,67 +314,72 @@ async function loadCategories() {
         adminState.categories = data || [];
         renderCategories();
         updateCategorySelect();
-        
+        console.log('✅ Categories loaded:', adminState.categories.length);
     } catch (error) {
-        console.error('Error loading categories:', error);
+        console.error('❌ Error loading categories:', error);
         loadDemoCategories();
     }
 }
 
 function loadDemoCategories() {
     adminState.categories = [
-        { id: '1', nombre: 'Protección Personal', descripcion: 'Equipos de protección', orden: 1 },
-        { id: '2', nombre: 'Equipamiento Táctico', descripcion: 'Equipos tácticos', orden: 2 }
+        { id: '1', nombre: 'Categoría Demo', descripcion: 'Descripción demo' }
     ];
     renderCategories();
     updateCategorySelect();
 }
 
 function updateStats() {
-    adminElements.totalProducts.textContent = adminState.products.length;
-    adminElements.totalCategories.textContent = adminState.categories.length;
+    if (adminElements.totalProducts) {
+        adminElements.totalProducts.textContent = adminState.products.length;
+    }
+    if (adminElements.totalCategories) {
+        adminElements.totalCategories.textContent = adminState.categories.length;
+    }
 }
 
-// ─────────────────────────────────────────────────────────────────
-// PRODUCTS
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// PRODUCTS RENDERING
+// ═══════════════════════════════════════════════════════════════
 
 function renderProducts() {
     // Desktop Table
-    adminElements.productsTableBody.innerHTML = adminState.products.map(product => `
-        <tr>
-            <td>
-                <div class="table-image">
-                    <img src="${product.imagen_url || 'https://via.placeholder.com/100'}" alt="${product.nombre}">
-                </div>
-            </td>
-            <td>${product.nombre}</td>
-            <td>${product.categorias?.nombre || '-'}</td>
-            <td>
-                <span class="status-badge ${product.activo ? 'active' : 'inactive'}">
-                    ${product.activo ? 'Activo' : 'Inactivo'}
-                </span>
-            </td>
-            <td>
-                <div class="table-actions">
-                    <button class="table-btn edit-product" data-id="${product.id}" title="Editar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                    </button>
-                    <button class="table-btn delete delete-product" data-id="${product.id}" title="Eliminar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                        </svg>
-                    </button>
-                </div>
-            </td>
-        </tr>
-    `).join('');
+    if (adminElements.productsTableBody) {
+        adminElements.productsTableBody.innerHTML = adminState.products.map(product => `
+            <tr>
+                <td>
+                    <div class="table-image">
+                        <img src="${product.imagen_url || 'https://via.placeholder.com/100'}" alt="${product.nombre}">
+                    </div>
+                </td>
+                <td>${product.nombre}</td>
+                <td>${product.categorias?.nombre || '-'}</td>
+                <td>
+                    <span class="status-badge ${product.activo ? 'active' : 'inactive'}">
+                        ${product.activo ? 'Activo' : 'Inactivo'}
+                    </span>
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <button class="table-btn edit-product" data-id="${product.id}" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button class="table-btn delete delete-product" data-id="${product.id}" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
     
-    // Mobile Cards (NUEVO)
+    // Mobile Cards
     if (adminElements.productsMobile) {
         adminElements.productsMobile.innerHTML = adminState.products.map(product => `
             <div class="product-mobile-card">
@@ -357,14 +396,14 @@ function renderProducts() {
                     </div>
                 </div>
                 <div class="product-mobile-card-actions">
-                    <button class="edit-product" data-id="${product.id}">
+                    <button class="edit-product" data-id="${product.id}" type="button">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
                             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
                         Editar
                     </button>
-                    <button class="delete delete-product" data-id="${product.id}">
+                    <button class="delete delete-product" data-id="${product.id}" type="button">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"/>
                             <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
@@ -376,7 +415,7 @@ function renderProducts() {
         `).join('');
     }
     
-    // Add event listeners (both views)
+    // Event listeners
     document.querySelectorAll('.edit-product').forEach(btn => {
         btn.addEventListener('click', () => editProduct(btn.dataset.id));
     });
@@ -392,16 +431,32 @@ function editProduct(id) {
     
     adminState.editingProduct = product;
     
-    adminElements.productModalTitle.textContent = 'Editar Producto';
-    adminElements.productId.value = product.id;
-    adminElements.productName.value = product.nombre;
-    adminElements.productCategory.value = product.categoria_id || '';
-    adminElements.productShortDesc.value = product.descripcion_corta || '';
-    adminElements.productLongDesc.value = product.descripcion_larga || '';
-    adminElements.productFeatured.checked = product.destacado || false;
-    adminElements.productActive.checked = product.activo !== false;
+    if (adminElements.productModalTitle) {
+        adminElements.productModalTitle.textContent = 'Editar Producto';
+    }
+    if (adminElements.productId) {
+        adminElements.productId.value = product.id;
+    }
+    if (adminElements.productName) {
+        adminElements.productName.value = product.nombre;
+    }
+    if (adminElements.productCategory) {
+        adminElements.productCategory.value = product.categoria_id || '';
+    }
+    if (adminElements.productShortDesc) {
+        adminElements.productShortDesc.value = product.descripcion_corta || '';
+    }
+    if (adminElements.productLongDesc) {
+        adminElements.productLongDesc.value = product.descripcion_larga || '';
+    }
+    if (adminElements.productFeatured) {
+        adminElements.productFeatured.checked = product.destacado || false;
+    }
+    if (adminElements.productActive) {
+        adminElements.productActive.checked = product.activo !== false;
+    }
     
-    if (product.imagen_url) {
+    if (product.imagen_url && adminElements.imagePreview) {
         adminElements.imagePreview.innerHTML = `<img src="${product.imagen_url}" alt="Preview">`;
         adminElements.imagePreview.classList.add('has-image');
     }
@@ -410,14 +465,18 @@ function editProduct(id) {
 }
 
 function confirmDeleteProduct(id) {
-    adminElements.confirmMessage.textContent = '¿Estás seguro de eliminar este producto?';
-    adminElements.confirmBtn.onclick = () => deleteProduct(id);
+    if (adminElements.confirmMessage) {
+        adminElements.confirmMessage.textContent = '¿Estás seguro de eliminar este producto?';
+    }
+    if (adminElements.confirmBtn) {
+        adminElements.confirmBtn.onclick = () => deleteProduct(id);
+    }
     openModal('confirmModal');
 }
 
 async function deleteProduct(id) {
     try {
-        const { error } = await supabaseClient
+        const { error } = await window.supabaseClient
             .from('productos')
             .delete()
             .eq('id', id);
@@ -429,18 +488,19 @@ async function deleteProduct(id) {
         updateStats();
         closeModal('confirmModal');
         showToast('Producto eliminado', 'success');
-        
     } catch (error) {
         console.error('Error deleting product:', error);
-        showToast('Error al eliminar producto', 'error');
+        showToast('Error al eliminar', 'error');
     }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // CATEGORIES
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function renderCategories() {
+    if (!adminElements.categoriesGrid) return;
+    
     adminElements.categoriesGrid.innerHTML = adminState.categories.map(category => `
         <div class="category-card">
             <div class="category-card-header">
@@ -451,13 +511,13 @@ function renderCategories() {
             </div>
             <p>${category.descripcion || 'Sin descripción'}</p>
             <div class="category-card-footer">
-                <button class="table-btn edit-category" data-id="${category.id}">
+                <button class="table-btn edit-category" data-id="${category.id}" type="button">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
                         <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
                     </svg>
                 </button>
-                <button class="table-btn delete delete-category" data-id="${category.id}">
+                <button class="table-btn delete delete-category" data-id="${category.id}" type="button">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="3 6 5 6 21 6"/>
                         <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
@@ -477,6 +537,8 @@ function renderCategories() {
 }
 
 function updateCategorySelect() {
+    if (!adminElements.productCategory) return;
+    
     adminElements.productCategory.innerHTML = '<option value="">Seleccionar categoría</option>';
     
     adminState.categories.forEach(category => {
@@ -493,24 +555,38 @@ function editCategory(id) {
     
     adminState.editingCategory = category;
     
-    adminElements.categoryModalTitle.textContent = 'Editar Categoría';
-    adminElements.categoryId.value = category.id;
-    adminElements.categoryName.value = category.nombre;
-    adminElements.categoryDesc.value = category.descripcion || '';
-    adminElements.categoryOrder.value = category.orden || 0;
+    if (adminElements.categoryModalTitle) {
+        adminElements.categoryModalTitle.textContent = 'Editar Categoría';
+    }
+    if (adminElements.categoryId) {
+        adminElements.categoryId.value = category.id;
+    }
+    if (adminElements.categoryName) {
+        adminElements.categoryName.value = category.nombre;
+    }
+    if (adminElements.categoryDesc) {
+        adminElements.categoryDesc.value = category.descripcion || '';
+    }
+    if (adminElements.categoryOrder) {
+        adminElements.categoryOrder.value = category.orden || 0;
+    }
     
     openModal('categoryModal');
 }
 
 function confirmDeleteCategory(id) {
-    adminElements.confirmMessage.textContent = '¿Estás seguro de eliminar esta categoría? Los productos asociados quedarán sin categoría.';
-    adminElements.confirmBtn.onclick = () => deleteCategory(id);
+    if (adminElements.confirmMessage) {
+        adminElements.confirmMessage.textContent = '¿Estás seguro de eliminar esta categoría?';
+    }
+    if (adminElements.confirmBtn) {
+        adminElements.confirmBtn.onclick = () => deleteCategory(id);
+    }
     openModal('confirmModal');
 }
 
 async function deleteCategory(id) {
     try {
-        const { error } = await supabaseClient
+        const { error } = await window.supabaseClient
             .from('categorias')
             .delete()
             .eq('id', id);
@@ -523,40 +599,48 @@ async function deleteCategory(id) {
         updateStats();
         closeModal('confirmModal');
         showToast('Categoría eliminada', 'success');
-        
     } catch (error) {
         console.error('Error deleting category:', error);
-        showToast('Error al eliminar categoría', 'error');
+        showToast('Error al eliminar', 'error');
     }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // MODALS
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function initModals() {
+    console.log('🔲 Initializing modals...');
+    
     document.querySelectorAll('[data-close]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            closeModal(btn.dataset.close);
+        btn.addEventListener('click', function() {
+            closeModal(this.dataset.close);
         });
     });
     
     document.querySelectorAll('.admin-modal').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal(modal.id);
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal(this.id);
+            }
         });
     });
 }
 
 function openModal(modalId) {
-    document.getElementById(modalId).classList.add('active');
-    document.body.style.overflow = 'hidden'; // NUEVO
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
 }
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
-    modal.classList.remove('active');
-    document.body.style.overflow = ''; // NUEVO
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
     
     if (modalId === 'productModal') {
         resetProductForm();
@@ -567,83 +651,117 @@ function closeModal(modalId) {
 
 function resetProductForm() {
     adminState.editingProduct = null;
-    adminElements.productForm.reset();
-    adminElements.productModalTitle.textContent = 'Nuevo Producto';
-    adminElements.productId.value = '';
-    adminElements.productActive.checked = true;
-    adminElements.imagePreview.innerHTML = `
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-        </svg>
-        <span>Click o arrastra una imagen</span>
-    `;
-    adminElements.imagePreview.classList.remove('has-image');
+    if (adminElements.productForm) {
+        adminElements.productForm.reset();
+    }
+    if (adminElements.productModalTitle) {
+        adminElements.productModalTitle.textContent = 'Nuevo Producto';
+    }
+    if (adminElements.productId) {
+        adminElements.productId.value = '';
+    }
+    if (adminElements.productActive) {
+        adminElements.productActive.checked = true;
+    }
+    if (adminElements.imagePreview) {
+        adminElements.imagePreview.innerHTML = `
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>Click o arrastra una imagen</span>
+        `;
+        adminElements.imagePreview.classList.remove('has-image');
+    }
 }
 
 function resetCategoryForm() {
     adminState.editingCategory = null;
-    adminElements.categoryForm.reset();
-    adminElements.categoryModalTitle.textContent = 'Nueva Categoría';
-    adminElements.categoryId.value = '';
-    adminElements.categoryOrder.value = '0';
+    if (adminElements.categoryForm) {
+        adminElements.categoryForm.reset();
+    }
+    if (adminElements.categoryModalTitle) {
+        adminElements.categoryModalTitle.textContent = 'Nueva Categoría';
+    }
+    if (adminElements.categoryId) {
+        adminElements.categoryId.value = '';
+    }
+    if (adminElements.categoryOrder) {
+        adminElements.categoryOrder.value = '0';
+    }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // FORMS
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function initForms() {
-    adminElements.productForm.addEventListener('submit', handleProductSubmit);
-    adminElements.categoryForm.addEventListener('submit', handleCategorySubmit);
+    console.log('📝 Initializing forms...');
     
-    // Image upload - ACTUALIZADO
+    if (adminElements.productForm) {
+        adminElements.productForm.addEventListener('submit', handleProductSubmit);
+    }
+    
+    if (adminElements.categoryForm) {
+        adminElements.categoryForm.addEventListener('submit', handleCategorySubmit);
+    }
+    
+    // Image upload
     const uploadArea = adminElements.uploadArea || adminElements.imagePreview;
     const fileInput = adminElements.productImage;
     
-    uploadArea.addEventListener('click', () => fileInput.click());
+    if (uploadArea && fileInput) {
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--accent-tactical)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '';
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleImagePreview(e.dataTransfer.files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleImagePreview(e.target.files[0]);
+            }
+        });
+    }
     
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.style.borderColor = 'var(--accent-tactical)';
-    });
+    // Add buttons
+    if (adminElements.addProductBtn) {
+        adminElements.addProductBtn.addEventListener('click', () => {
+            resetProductForm();
+            openModal('productModal');
+        });
+    }
     
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.style.borderColor = '';
-    });
-    
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.style.borderColor = '';
-        if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            handleImagePreview(e.dataTransfer.files[0]);
-        }
-    });
-    
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            handleImagePreview(e.target.files[0]);
-        }
-    });
-    
-    adminElements.addProductBtn.addEventListener('click', () => {
-        resetProductForm();
-        openModal('productModal');
-    });
-    
-    adminElements.addCategoryBtn.addEventListener('click', () => {
-        resetCategoryForm();
-        openModal('categoryModal');
-    });
+    if (adminElements.addCategoryBtn) {
+        adminElements.addCategoryBtn.addEventListener('click', () => {
+            resetCategoryForm();
+            openModal('categoryModal');
+        });
+    }
 }
 
 function handleImagePreview(file) {
     const reader = new FileReader();
     reader.onload = (e) => {
-        adminElements.imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-        adminElements.imagePreview.classList.add('has-image');
+        if (adminElements.imagePreview) {
+            adminElements.imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+            adminElements.imagePreview.classList.add('has-image');
+        }
     };
     reader.readAsDataURL(file);
 }
@@ -652,27 +770,27 @@ async function handleProductSubmit(e) {
     e.preventDefault();
     
     const formData = {
-        nombre: adminElements.productName.value,
-        slug: generateSlug(adminElements.productName.value),
-        descripcion_corta: adminElements.productShortDesc.value,
-        descripcion_larga: adminElements.productLongDesc.value,
-        categoria_id: adminElements.productCategory.value || null,
-        destacado: adminElements.productFeatured.checked,
-        activo: adminElements.productActive.checked,
+        nombre: adminElements.productName?.value,
+        slug: generateSlug(adminElements.productName?.value || ''),
+        descripcion_corta: adminElements.productShortDesc?.value,
+        descripcion_larga: adminElements.productLongDesc?.value,
+        categoria_id: adminElements.productCategory?.value || null,
+        destacado: adminElements.productFeatured?.checked || false,
+        activo: adminElements.productActive?.checked !== false,
         updated_at: new Date().toISOString()
     };
     
     try {
-        const imageFile = adminElements.productImage.files[0];
+        const imageFile = adminElements.productImage?.files[0];
         if (imageFile) {
             const imagePath = `productos/${Date.now()}_${imageFile.name}`;
-            const { error: uploadError } = await supabaseClient.storage
+            const { error: uploadError } = await window.supabaseClient.storage
                 .from('productos')
                 .upload(imagePath, imageFile);
             
             if (uploadError) throw uploadError;
             
-            const { data: urlData } = supabaseClient.storage
+            const { data: urlData } = window.supabaseClient.storage
                 .from('productos')
                 .getPublicUrl(imagePath);
             
@@ -681,14 +799,14 @@ async function handleProductSubmit(e) {
         
         let result;
         if (adminState.editingProduct) {
-            result = await supabaseClient
+            result = await window.supabaseClient
                 .from('productos')
                 .update(formData)
                 .eq('id', adminState.editingProduct.id)
                 .select();
         } else {
             formData.created_at = new Date().toISOString();
-            result = await supabaseClient
+            result = await window.supabaseClient
                 .from('productos')
                 .insert([formData])
                 .select();
@@ -710,10 +828,9 @@ async function handleProductSubmit(e) {
         updateStats();
         closeModal('productModal');
         showToast(adminState.editingProduct ? 'Producto actualizado' : 'Producto creado', 'success');
-        
     } catch (error) {
         console.error('Error saving product:', error);
-        showToast('Error al guardar producto: ' + error.message, 'error');
+        showToast('Error: ' + error.message, 'error');
     }
 }
 
@@ -721,23 +838,23 @@ async function handleCategorySubmit(e) {
     e.preventDefault();
     
     const formData = {
-        nombre: adminElements.categoryName.value,
-        slug: generateSlug(adminElements.categoryName.value),
-        descripcion: adminElements.categoryDesc.value,
-        orden: parseInt(adminElements.categoryOrder.value) || 0,
+        nombre: adminElements.categoryName?.value,
+        slug: generateSlug(adminElements.categoryName?.value || ''),
+        descripcion: adminElements.categoryDesc?.value,
+        orden: parseInt(adminElements.categoryOrder?.value) || 0,
         activa: true
     };
     
     try {
         let result;
         if (adminState.editingCategory) {
-            result = await supabaseClient
+            result = await window.supabaseClient
                 .from('categorias')
                 .update(formData)
                 .eq('id', adminState.editingCategory.id)
                 .select();
         } else {
-            result = await supabaseClient
+            result = await window.supabaseClient
                 .from('categorias')
                 .insert([formData])
                 .select();
@@ -760,21 +877,22 @@ async function handleCategorySubmit(e) {
         updateStats();
         closeModal('categoryModal');
         showToast(adminState.editingCategory ? 'Categoría actualizada' : 'Categoría creada', 'success');
-        
     } catch (error) {
         console.error('Error saving category:', error);
-        showToast('Error al guardar categoría: ' + error.message, 'error');
+        showToast('Error: ' + error.message, 'error');
     }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // QUICK ACTIONS
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function initQuickActions() {
+    console.log('⚡ Initializing quick actions...');
+    
     document.querySelectorAll('[data-action]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const action = btn.dataset.action;
+        btn.addEventListener('click', function() {
+            const action = this.dataset.action;
             
             if (action === 'add-product') {
                 switchTab('products');
@@ -789,9 +907,9 @@ function initQuickActions() {
     });
 }
 
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 // UTILITIES
-// ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
 
 function generateSlug(text) {
     return text
@@ -803,6 +921,8 @@ function generateSlug(text) {
 }
 
 function showToast(message, type = 'success') {
+    if (!adminElements.toastContainer) return;
+    
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.innerHTML = `
@@ -824,6 +944,6 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// Make functions available globally
+// Global functions
 window.openModal = openModal;
 window.closeModal = closeModal;
