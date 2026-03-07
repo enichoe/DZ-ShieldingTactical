@@ -1935,7 +1935,7 @@ input, textarea, select {
     border-radius: var(--radius-xl);
     padding: var(--space-xl);
     display: block;
-    margin-top: 35px;
+    margin-top: 45px;
 }
 
 .modal-sm {
