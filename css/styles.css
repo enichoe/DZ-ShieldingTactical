@@ -341,7 +341,7 @@ input, textarea, select {
     left: 50%;
     width: 2px;
     height: 100%;
-    background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+    background: linear-gradient(180deg, transparent, rgba(57, 255, 20, 1), transparent);
     transform-origin: top center;
     animation: scan-rotate 8s linear infinite;
 }
