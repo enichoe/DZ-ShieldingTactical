@@ -2698,3 +2698,15 @@ input, textarea, select {
         transition: transform var(--transition-base);
     }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   FIX: Overlay solo visible cuando tiene clase 'active'
+   ═══════════════════════════════════════════════════════════════ */
+
+.sidebar-overlay {
+    display: none !important;
+}
+
+.sidebar-overlay.active {
+    display: block !important;
+}
