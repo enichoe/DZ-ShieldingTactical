@@ -31,6 +31,11 @@ const adminElements = {
     adminDashboard: document.getElementById('adminDashboard'),
     logoutBtn: document.getElementById('logoutBtn'),
     
+    // Mobile Navigation (NUEVO)
+    menuToggleAdmin: document.getElementById('menuToggleAdmin'),
+    sidebarOverlay: document.getElementById('sidebarOverlay'),
+    adminSidebar: document.getElementById('adminSidebar'),
+    
     // Navigation
     navItems: document.querySelectorAll('.nav-item'),
     tabs: document.querySelectorAll('.admin-tab'),
@@ -42,6 +47,7 @@ const adminElements = {
     // Products
     addProductBtn: document.getElementById('addProductBtn'),
     productsTableBody: document.getElementById('productsTableBody'),
+    productsMobile: document.getElementById('productsMobile'), // NUEVO
     productModal: document.getElementById('productModal'),
     productForm: document.getElementById('productForm'),
     productModalTitle: document.getElementById('productModalTitle'),
@@ -52,6 +58,7 @@ const adminElements = {
     productLongDesc: document.getElementById('productLongDesc'),
     productImage: document.getElementById('productImage'),
     imagePreview: document.getElementById('imagePreview'),
+    uploadArea: document.getElementById('uploadArea'), // NUEVO
     productFeatured: document.getElementById('productFeatured'),
     productActive: document.getElementById('productActive'),
     
@@ -81,11 +88,41 @@ const adminElements = {
 
 document.addEventListener('DOMContentLoaded', async () => {
     initAuth();
+    initMobileNavigation(); // NUEVO
     initNavigation();
     initModals();
     initForms();
     initQuickActions();
 });
+
+// ─────────────────────────────────────────────────────────────────
+// MOBILE NAVIGATION (NUEVO)
+// ─────────────────────────────────────────────────────────────────
+
+function initMobileNavigation() {
+    // Toggle sidebar
+    adminElements.menuToggleAdmin?.addEventListener('click', toggleSidebar);
+    adminElements.sidebarOverlay?.addEventListener('click', closeSidebar);
+    
+    // Close sidebar on nav item click (mobile)
+    adminElements.navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            }
+        });
+    });
+}
+
+function toggleSidebar() {
+    adminElements.adminSidebar.classList.toggle('active');
+    adminElements.sidebarOverlay.classList.toggle('active');
+}
+
+function closeSidebar() {
+    adminElements.adminSidebar.classList.remove('active');
+    adminElements.sidebarOverlay.classList.remove('active');
+}
 
 // ─────────────────────────────────────────────────────────────────
 // AUTHENTICATION
@@ -213,7 +250,6 @@ async function loadProducts() {
     } catch (error) {
         console.error('Error loading products:', error);
         showToast('Error al cargar productos', 'error');
-        // Load demo data
         loadDemoProducts();
     }
 }
@@ -270,6 +306,7 @@ function updateStats() {
 // ─────────────────────────────────────────────────────────────────
 
 function renderProducts() {
+    // Desktop Table
     adminElements.productsTableBody.innerHTML = adminState.products.map(product => `
         <tr>
             <td>
@@ -303,7 +340,43 @@ function renderProducts() {
         </tr>
     `).join('');
     
-    // Add event listeners
+    // Mobile Cards (NUEVO)
+    if (adminElements.productsMobile) {
+        adminElements.productsMobile.innerHTML = adminState.products.map(product => `
+            <div class="product-mobile-card">
+                <div class="product-mobile-card-header">
+                    <div class="product-mobile-card-image">
+                        <img src="${product.imagen_url || 'https://via.placeholder.com/100'}" alt="${product.nombre}">
+                    </div>
+                    <div class="product-mobile-card-info">
+                        <div class="product-mobile-card-name">${product.nombre}</div>
+                        <div class="product-mobile-card-category">${product.categorias?.nombre || 'Sin categoría'}</div>
+                        <span class="product-mobile-card-status ${product.activo ? 'active' : 'inactive'}">
+                            ${product.activo ? 'Activo' : 'Inactivo'}
+                        </span>
+                    </div>
+                </div>
+                <div class="product-mobile-card-actions">
+                    <button class="edit-product" data-id="${product.id}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Editar
+                    </button>
+                    <button class="delete delete-product" data-id="${product.id}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                        </svg>
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // Add event listeners (both views)
     document.querySelectorAll('.edit-product').forEach(btn => {
         btn.addEventListener('click', () => editProduct(btn.dataset.id));
     });
@@ -328,7 +401,6 @@ function editProduct(id) {
     adminElements.productFeatured.checked = product.destacado || false;
     adminElements.productActive.checked = product.activo !== false;
     
-    // Show image preview
     if (product.imagen_url) {
         adminElements.imagePreview.innerHTML = `<img src="${product.imagen_url}" alt="Preview">`;
         adminElements.imagePreview.classList.add('has-image');
@@ -395,7 +467,6 @@ function renderCategories() {
         </div>
     `).join('');
     
-    // Add event listeners
     document.querySelectorAll('.edit-category').forEach(btn => {
         btn.addEventListener('click', () => editCategory(btn.dataset.id));
     });
@@ -464,14 +535,12 @@ async function deleteCategory(id) {
 // ─────────────────────────────────────────────────────────────────
 
 function initModals() {
-    // Close buttons
     document.querySelectorAll('[data-close]').forEach(btn => {
         btn.addEventListener('click', () => {
             closeModal(btn.dataset.close);
         });
     });
     
-    // Click outside to close
     document.querySelectorAll('.admin-modal').forEach(modal => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal(modal.id);
@@ -481,13 +550,14 @@ function initModals() {
 
 function openModal(modalId) {
     document.getElementById(modalId).classList.add('active');
+    document.body.style.overflow = 'hidden'; // NUEVO
 }
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.classList.remove('active');
+    document.body.style.overflow = ''; // NUEVO
     
-    // Reset form if it's product or category modal
     if (modalId === 'productModal') {
         resetProductForm();
     } else if (modalId === 'categoryModal') {
@@ -525,14 +595,11 @@ function resetCategoryForm() {
 // ─────────────────────────────────────────────────────────────────
 
 function initForms() {
-    // Product form
     adminElements.productForm.addEventListener('submit', handleProductSubmit);
-    
-    // Category form
     adminElements.categoryForm.addEventListener('submit', handleCategorySubmit);
     
-    // Image upload
-    const uploadArea = adminElements.imagePreview;
+    // Image upload - ACTUALIZADO
+    const uploadArea = adminElements.uploadArea || adminElements.imagePreview;
     const fileInput = adminElements.productImage;
     
     uploadArea.addEventListener('click', () => fileInput.click());
@@ -561,7 +628,6 @@ function initForms() {
         }
     });
     
-    // Add buttons
     adminElements.addProductBtn.addEventListener('click', () => {
         resetProductForm();
         openModal('productModal');
@@ -597,7 +663,6 @@ async function handleProductSubmit(e) {
     };
     
     try {
-        // Handle image upload
         const imageFile = adminElements.productImage.files[0];
         if (imageFile) {
             const imagePath = `productos/${Date.now()}_${imageFile.name}`;
@@ -616,14 +681,12 @@ async function handleProductSubmit(e) {
         
         let result;
         if (adminState.editingProduct) {
-            // Update existing
             result = await supabaseClient
                 .from('productos')
                 .update(formData)
                 .eq('id', adminState.editingProduct.id)
                 .select();
         } else {
-            // Create new
             formData.created_at = new Date().toISOString();
             result = await supabaseClient
                 .from('productos')
@@ -634,7 +697,6 @@ async function handleProductSubmit(e) {
         const { data, error } = result;
         if (error) throw error;
         
-        // Update local state
         if (adminState.editingProduct) {
             const index = adminState.products.findIndex(p => p.id === adminState.editingProduct.id);
             if (index !== -1) {

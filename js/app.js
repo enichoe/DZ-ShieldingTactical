@@ -454,7 +454,7 @@ function requestQuote() {
     const items = state.cart.map(item => `• ${item.nombre} (x${item.quantity})`).join('\n');
     
     const message = `Hola, solicito cotización para los siguientes productos:\n\n${items}\n\n${notes ? 'Notas: ' + notes : ''}`;
-    const phone = '51999999999';
+    const phone = '51936270270';
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     
     window.open(url, '_blank');
