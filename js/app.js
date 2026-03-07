@@ -20,21 +20,16 @@ const state = {
 // ─────────────────────────────────────────────────────────────────
 
 const elements = {
-    // Header
     header: document.getElementById('header'),
     nav: document.getElementById('nav'),
     menuToggle: document.getElementById('menuToggle'),
     cartBtn: document.getElementById('cartBtn'),
     cartCount: document.getElementById('cartCount'),
-    
-    // Products
     productsGrid: document.getElementById('productsGrid'),
     categories: document.getElementById('categories'),
     searchInput: document.getElementById('searchInput'),
     loadingState: document.getElementById('loadingState'),
     emptyState: document.getElementById('emptyState'),
-    
-    // Cart
     cartOverlay: document.getElementById('cartOverlay'),
     cartSidebar: document.getElementById('cartSidebar'),
     cartClose: document.getElementById('cartClose'),
@@ -45,13 +40,9 @@ const elements = {
     clearCart: document.getElementById('clearCart'),
     requestQuote: document.getElementById('requestQuote'),
     cartActions: document.getElementById('cartActions'),
-    
-    // Modal
     productModal: document.getElementById('productModal'),
     modalContent: document.getElementById('modalContent'),
     modalClose: document.getElementById('modalClose'),
-    
-    // Toast
     toastContainer: document.getElementById('toastContainer')
 };
 
@@ -78,8 +69,13 @@ async function loadData() {
     showLoading(true);
     
     try {
+        // Verificar que el cliente esté disponible
+        if (!window.db) {
+            throw new Error('Cliente Supabase no inicializado');
+        }
+        
         // Load categories
-        const { data: categories, error: catError } = await supabaseClient
+        const { data: categories, error: catError } = await window.db
             .from('categorias')
             .select('*')
             .eq('activa', true)
@@ -89,7 +85,7 @@ async function loadData() {
         state.categories = categories || [];
         
         // Load products
-        const { data: products, error: prodError } = await supabaseClient
+        const { data: products, error: prodError } = await window.db
             .from('productos')
             .select(`
                 *,
@@ -101,10 +97,11 @@ async function loadData() {
         if (prodError) throw prodError;
         state.products = products || [];
         
+        console.log('✅ Datos cargados:', state.products.length, 'productos,', state.categories.length, 'categorías');
+        
     } catch (error) {
         console.error('Error loading data:', error);
-        showToast('Error al cargar los datos', 'error');
-        // Load demo data if Supabase fails
+        showToast('Error al cargar los datos. Verifica la conexión.', 'error');
         loadDemoData();
     }
     
@@ -113,6 +110,8 @@ async function loadData() {
 }
 
 function loadDemoData() {
+    console.log('📦 Cargando datos de demostración...');
+    
     state.categories = [
         { id: '1', nombre: 'Protección Personal', slug: 'proteccion-personal' },
         { id: '2', nombre: 'Equipamiento Táctico', slug: 'equipamiento-tactico' },
@@ -124,7 +123,7 @@ function loadDemoData() {
             id: '1',
             nombre: 'Chaleco Táctico Profesional',
             descripcion_corta: 'Chaleco de protección con múltiples bolsillos y sistema MOLLE.',
-            descripcion_larga: 'Chaleco táctico de alta resistencia diseñado para operaciones profesionales. Incluye sistema MOLLE completo, bolsillos modulares y protección balística opcional.',
+            descripcion_larga: 'Chaleco táctico de alta resistencia diseñado para operaciones profesionales.',
             imagen_url: 'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600',
             categoria_id: '2',
             categorias: { nombre: 'Equipamiento Táctico' }
@@ -133,7 +132,7 @@ function loadDemoData() {
             id: '2',
             nombre: 'Casco de Protección Ballístico',
             descripcion_corta: 'Casco de protección nivel IIIA con sistema de ajuste.',
-            descripcion_larga: 'Casco balístico certificado nivel IIIA con protección contra proyectiles de mano. Sistema de ventilación y ajuste ergonómico para uso prolongado.',
+            descripcion_larga: 'Casco balístico certificado nivel IIIA con protección contra proyectiles.',
             imagen_url: 'https://images.unsplash.com/photo-1595590424252-552d5f0a9a21?w=600',
             categoria_id: '1',
             categorias: { nombre: 'Protección Personal' }
@@ -142,7 +141,7 @@ function loadDemoData() {
             id: '3',
             nombre: 'Guantes Tácticos Reforzados',
             descripcion_corta: 'Guantes de combate con protección en nudillos.',
-            descripcion_larga: 'Guantes tácticos profesionales con refuerzo en nudillos, palma antideslizante y paneles de ventilación. Ideales para operaciones tácticas.',
+            descripcion_larga: 'Guantes tácticos profesionales con refuerzo en nudillos.',
             imagen_url: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600',
             categoria_id: '3',
             categorias: { nombre: 'Accesorios' }
@@ -151,12 +150,14 @@ function loadDemoData() {
             id: '4',
             nombre: 'Mochila Táctica 45L',
             descripcion_corta: 'Mochila de assault con sistema hidratación.',
-            descripcion_larga: 'Mochila táctica de 45 litros con compartimento para sistema de hidratación, múltiples bolsillos organizadores y sistema MOLLE en exterior.',
+            descripcion_larga: 'Mochila táctica de 45 litros con compartimento para sistema de hidratación.',
             imagen_url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600',
             categoria_id: '2',
             categorias: { nombre: 'Equipamiento Táctico' }
         }
     ];
+    
+    showToast('Modo demostración - Conecta Supabase para datos reales', 'error');
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -164,19 +165,13 @@ function loadDemoData() {
 // ─────────────────────────────────────────────────────────────────
 
 function initScrollEffects() {
-    let lastScroll = 0;
-    
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
-        
-        // Header shadow on scroll
         if (currentScroll > 50) {
             elements.header.classList.add('scrolled');
         } else {
             elements.header.classList.remove('scrolled');
         }
-        
-        lastScroll = currentScroll;
     });
 }
 
@@ -185,13 +180,11 @@ function initScrollEffects() {
 // ─────────────────────────────────────────────────────────────────
 
 function initNavigation() {
-    // Mobile menu toggle
     elements.menuToggle.addEventListener('click', () => {
         elements.nav.classList.toggle('active');
         elements.menuToggle.classList.toggle('active');
     });
     
-    // Smooth scroll for nav links
     document.querySelectorAll('[data-section]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -199,11 +192,9 @@ function initNavigation() {
             const target = document.getElementById(section);
             
             if (target) {
-                // Close mobile menu
                 elements.nav.classList.remove('active');
                 elements.menuToggle.classList.remove('active');
                 
-                // Scroll to section
                 const headerHeight = elements.header.offsetHeight;
                 const targetPosition = target.offsetTop - headerHeight;
                 
@@ -212,14 +203,12 @@ function initNavigation() {
                     behavior: 'smooth'
                 });
                 
-                // Update active nav link
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 document.querySelector(`.nav-link[data-section="${section}"]`)?.classList.add('active');
             }
         });
     });
     
-    // Search input
     elements.searchInput.addEventListener('input', debounce((e) => {
         state.searchQuery = e.target.value.toLowerCase();
         renderProducts();
@@ -231,11 +220,9 @@ function initNavigation() {
 // ─────────────────────────────────────────────────────────────────
 
 function renderCategories() {
-    // Clear existing buttons except "All"
     const existingBtns = elements.categories.querySelectorAll('.category-btn:not([data-category="all"])');
     existingBtns.forEach(btn => btn.remove());
     
-    // Add category buttons
     state.categories.forEach(category => {
         const btn = document.createElement('button');
         btn.className = 'category-btn';
@@ -244,14 +231,10 @@ function renderCategories() {
         elements.categories.appendChild(btn);
     });
     
-    // Add click handlers
     elements.categories.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Update active state
             elements.categories.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            // Update state and render
             state.currentCategory = btn.dataset.category;
             renderProducts();
         });
@@ -265,12 +248,10 @@ function renderCategories() {
 function renderProducts() {
     let filtered = [...state.products];
     
-    // Filter by category
     if (state.currentCategory !== 'all') {
         filtered = filtered.filter(p => p.categoria_id === state.currentCategory);
     }
     
-    // Filter by search
     if (state.searchQuery) {
         filtered = filtered.filter(p => 
             p.nombre.toLowerCase().includes(state.searchQuery) ||
@@ -278,10 +259,8 @@ function renderProducts() {
         );
     }
     
-    // Clear grid
     elements.productsGrid.innerHTML = '';
     
-    // Show/hide states
     if (state.loading) {
         elements.emptyState.style.display = 'none';
         return;
@@ -294,16 +273,17 @@ function renderProducts() {
     
     elements.emptyState.style.display = 'none';
     
-    // Render products
-    filtered.forEach(product => {
-        const card = createProductCard(product);
+    filtered.forEach((product, index) => {
+        const card = createProductCard(product, index);
         elements.productsGrid.appendChild(card);
     });
 }
 
-function createProductCard(product) {
+function createProductCard(product, index) {
     const card = document.createElement('article');
     card.className = 'product-card';
+    card.style.animationDelay = `${index * 0.05}s`;
+    
     card.innerHTML = `
         <div class="product-image">
             <img src="${product.imagen_url || 'https://via.placeholder.com/400x300?text=Sin+Imagen'}" 
@@ -315,8 +295,8 @@ function createProductCard(product) {
             <h3 class="product-name">${product.nombre}</h3>
             <p class="product-desc">${product.descripcion_corta || ''}</p>
             <div class="product-actions">
-                <button class="btn btn-ghost view-details" data-id="${product.id}">Ver Detalles</button>
-                <button class="btn btn-primary add-to-cart" data-id="${product.id}">
+                <button class="btn btn-ghost view-details">Ver Detalles</button>
+                <button class="btn btn-primary add-to-cart">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
@@ -327,7 +307,6 @@ function createProductCard(product) {
         </div>
     `;
     
-    // Event listeners
     card.querySelector('.view-details').addEventListener('click', () => openProductModal(product));
     card.querySelector('.add-to-cart').addEventListener('click', () => addToCart(product));
     card.querySelector('.product-image').addEventListener('click', () => openProductModal(product));
@@ -345,14 +324,10 @@ function showLoading(show) {
 // ─────────────────────────────────────────────────────────────────
 
 function initCart() {
-    // Open cart
     elements.cartBtn.addEventListener('click', openCart);
-    
-    // Close cart
     elements.cartClose.addEventListener('click', closeCart);
     elements.cartOverlay.addEventListener('click', closeCart);
     
-    // Clear cart
     elements.clearCart.addEventListener('click', () => {
         state.cart = [];
         saveCart();
@@ -360,10 +335,8 @@ function initCart() {
         showToast('Carrito vaciado', 'success');
     });
     
-    // Request quote
     elements.requestQuote.addEventListener('click', requestQuote);
     
-    // Initial render
     updateCartCount();
     renderCart();
 }
@@ -461,7 +434,6 @@ function renderCart() {
         </div>
     `).join('');
     
-    // Add event listeners
     elements.cartItems.querySelectorAll('.qty-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const id = btn.dataset.id;
@@ -482,7 +454,7 @@ function requestQuote() {
     const items = state.cart.map(item => `• ${item.nombre} (x${item.quantity})`).join('\n');
     
     const message = `Hola, solicito cotización para los siguientes productos:\n\n${items}\n\n${notes ? 'Notas: ' + notes : ''}`;
-    const phone = '51999999999'; // Reemplazar con número real
+    const phone = '51999999999';
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     
     window.open(url, '_blank');
@@ -498,7 +470,6 @@ function initModal() {
         if (e.target === elements.productModal) closeModal();
     });
     
-    // Close on escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
@@ -541,7 +512,6 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
-// Make closeModal available globally
 window.closeModal = closeModal;
 
 // ─────────────────────────────────────────────────────────────────
