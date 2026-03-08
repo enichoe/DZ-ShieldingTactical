@@ -451,12 +451,30 @@ function renderCart() {
 
 function requestQuote() {
     const notes = document.getElementById('cartNotes').value;
-    const items = state.cart.map(item => `• ${item.nombre} (x${item.quantity})`).join('\n');
-    
-    const message = `Hola, solicito cotización para los siguientes productos:\n\n${items}\n\n${notes ? 'Notas: ' + notes : ''}`;
+
+    const items = state.cart
+        .map(item => `🔹 ${item.nombre}  |  Cantidad: ${item.quantity}`)
+        .join('\n');
+
+    const message = `🛡️ *DZ SHIELDING TACTICAL PERÚ*
+
+Hola, estoy interesado en cotizar el siguiente equipamiento táctico:
+
+${items}
+
+${notes ? `📝 *Notas adicionales:* ${notes}\n` : ''}
+
+📦 Agradecería información sobre:
+• Precio total
+• Disponibilidad
+• Tiempo de entrega
+
+🔥 Quedo atento a su respuesta.  
+Muchas gracias.`;
+
     const phone = '51936270270';
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    
+
     window.open(url, '_blank');
 }
 
