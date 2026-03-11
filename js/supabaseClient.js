@@ -17,10 +17,22 @@ if (typeof supabase === 'undefined' || !supabase.createClient) {
 } else {
 	const { createClient } = supabase;
 	if (!SUPABASE_ANON_KEY) {
-		console.warn('Advertencia: SUPABASE_ANON_KEY no definida. Asegúrate de generar `env.js` o configurar variables en Vercel.');
+		console.warn('Advertencia: SUPABASE_ANON_KEY no definida. No se inicializará el cliente Supabase. Genera `env.js` o configura variables en Vercel.');
+		window.SUPABASE_READY = false;
+		window.db = null;
+		window.supabaseClient = null;
+	} else {
+		try {
+			const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+			window.db = client;
+			window.supabaseClient = client;
+			window.SUPABASE_READY = true;
+			console.log('✅ Supabase cliente inicializado', client);
+		} catch (err) {
+			console.error('Error inicializando Supabase client:', err);
+			window.SUPABASE_READY = false;
+			window.db = null;
+			window.supabaseClient = null;
+		}
 	}
-	const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-	window.db = client;
-	window.supabaseClient = client;
-	console.log('✅ Supabase cliente inicializado', client);
 }
