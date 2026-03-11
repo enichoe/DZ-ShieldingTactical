@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     initQuickActions();
     
     console.log('✅ Admin Panel Ready');
+    // Global error handlers to show friendly toasts and reduce noisy console traces
+    window.addEventListener('error', (e) => {
+        console.error('Admin uncaught error:', e.error || e.message || e);
+        showToast('Error inesperado (admin)', 'error');
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+        console.error('Admin unhandled rejection:', e.reason || e);
+        showToast('Error en promesa (admin)', 'error');
+    });
 });
 
 // ═══════════════════════════════════════════════════════════════
@@ -146,24 +155,40 @@ function initAuth() {
         showToast('Error: Supabase no está configurado', 'error');
         return;
     }
-    
-    window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-            adminState.user = session.user;
-            showDashboard();
-        }
-    });
-    
-    window.supabaseClient.auth.onAuthStateChange((event, session) => {
-        console.log('🔐 Auth event:', event);
-        if (event === 'SIGNED_IN' && session) {
-            adminState.user = session.user;
-            showDashboard();
-        } else if (event === 'SIGNED_OUT') {
-            adminState.user = null;
-            showLogin();
-        }
-    });
+    if (!window.supabaseClient.auth) {
+        console.error('❌ Supabase auth no disponible');
+        showToast('Error: Auth no disponible', 'error');
+        return;
+    }
+
+    try {
+        window.supabaseClient.auth.getSession()
+            .then(({ data: { session } = {} } = {}) => {
+                if (session) {
+                    adminState.user = session.user;
+                    showDashboard();
+                }
+            })
+            .catch(err => console.warn('getSession error:', err));
+    } catch (err) {
+        console.warn('getSession exception:', err);
+    }
+
+    // Auth state listener
+    try {
+        window.supabaseClient.auth.onAuthStateChange((event, session) => {
+            console.log('🔐 Auth event:', event);
+            if (event === 'SIGNED_IN' && session) {
+                adminState.user = session.user;
+                showDashboard();
+            } else if (event === 'SIGNED_OUT') {
+                adminState.user = null;
+                showLogin();
+            }
+        });
+    } catch (err) {
+        console.warn('onAuthStateChange error:', err);
+    }
     
     if (adminElements.loginForm) {
         adminElements.loginForm.addEventListener('submit', async (e) => {
@@ -190,8 +215,8 @@ async function handleLogin() {
         });
         
         if (error) throw error;
-        
-        adminState.user = data.user;
+
+        adminState.user = data?.user || null;
         showDashboard();
         showToast('Sesión iniciada correctamente', 'success');
         
@@ -274,11 +299,13 @@ async function loadData() {
 
 async function loadProducts() {
     try {
+        if (!window.supabaseClient) throw new Error('Supabase no inicializado');
+
         const { data, error } = await window.supabaseClient
             .from('productos')
             .select(`*, categorias (nombre)`)
             .order('created_at', { ascending: false });
-        
+
         if (error) throw error;
         adminState.products = data || [];
         renderProducts();
@@ -314,11 +341,13 @@ function loadDemoProducts() {
 }
 async function loadCategories() {
     try {
+        if (!window.supabaseClient) throw new Error('Supabase no inicializado');
+
         const { data, error } = await window.supabaseClient
             .from('categorias')
             .select('*')
             .order('orden', { ascending: true });
-        
+
         if (error) throw error;
         adminState.categories = data || [];
         renderCategories();
@@ -485,14 +514,16 @@ function confirmDeleteProduct(id) {
 
 async function deleteProduct(id) {
     try {
-        const { error } = await window.supabaseClient
+        if (!window.supabaseClient) throw new Error('Supabase no inicializado');
+
+        const { data, error } = await window.supabaseClient
             .from('productos')
             .delete()
             .eq('id', id);
-        
+
         if (error) throw error;
-        
-        adminState.products = adminState.products.filter(p => p.id !== id);
+
+        adminState.products = adminState.products.filter(p => String(p.id) !== String(id));
         renderProducts();
         updateStats();
         closeModal('confirmModal');
@@ -595,14 +626,16 @@ function confirmDeleteCategory(id) {
 
 async function deleteCategory(id) {
     try {
-        const { error } = await window.supabaseClient
+        if (!window.supabaseClient) throw new Error('Supabase no inicializado');
+
+        const { data, error } = await window.supabaseClient
             .from('categorias')
             .delete()
             .eq('id', id);
-        
+
         if (error) throw error;
-        
-        adminState.categories = adminState.categories.filter(c => c.id !== id);
+
+        adminState.categories = adminState.categories.filter(c => String(c.id) !== String(id));
         renderCategories();
         updateCategorySelect();
         updateStats();

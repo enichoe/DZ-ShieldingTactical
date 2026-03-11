@@ -1,0 +1,7 @@
+# Ignorar archivo de variables runtime
+env.js
+
+# Node / system
+node_modules/
+dist/
+.DS_Store
