@@ -7,32 +7,23 @@
 // ═════════════════════════════════════════════════════
 
 const SUPABASE_URL = window.SUPABASE_URL || "https://igcrevixkxqguawipaon.supabase.co";
-// Por seguridad no mantener ANON key hard-coded en el repo.
-// Usar `env.js` o variables de entorno en Vercel para inyectarla en runtime.
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
+// Por conveniencia local, usar la clave incluida en el proyecto si no hay `env.js`.
+// Nota: esto deja la ANON KEY en el repo/local — recuerda no compartir el repo públicamente si contiene secretos.
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnY3Jldml4a3hxZ3Vhd2lwYW9uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NDk4MjMsImV4cCI6MjA4ODQyNTgyM30.9AsD7X-n4LU4H37rwigUlBdSef8XUj7-oVh2POr-sNU";
 
 // Asegurarse de que la librería global `supabase` está disponible
 if (typeof supabase === 'undefined' || !supabase.createClient) {
 	console.error('Supabase SDK no encontrado. Asegúrate de cargar el CDN antes de este script.');
 } else {
 	const { createClient } = supabase;
-	if (!SUPABASE_ANON_KEY) {
-		console.warn('Advertencia: SUPABASE_ANON_KEY no definida. No se inicializará el cliente Supabase. Genera `env.js` o configura variables en Vercel.');
-		window.SUPABASE_READY = false;
+	try {
+		const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+		window.db = client;
+		window.supabaseClient = client;
+		console.log('✅ Supabase cliente inicializado', client);
+	} catch (err) {
+		console.error('Error inicializando Supabase client:', err);
 		window.db = null;
 		window.supabaseClient = null;
-	} else {
-		try {
-			const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-			window.db = client;
-			window.supabaseClient = client;
-			window.SUPABASE_READY = true;
-			console.log('✅ Supabase cliente inicializado', client);
-		} catch (err) {
-			console.error('Error inicializando Supabase client:', err);
-			window.SUPABASE_READY = false;
-			window.db = null;
-			window.supabaseClient = null;
-		}
 	}
 }
